@@ -6,7 +6,7 @@ APP_USER="service"
 APP_PASS="$(credstash get sample-db-user)"
 
 FOUND=0
-docker exec test-db ls /data/db/.mongodb_password_set || FOUND=$?
+docker exec sample-db ls /data/db/.mongodb_password_set || FOUND=$?
 
 echo ""
 echo "Previous DB setup file found: ${FOUND}"
@@ -19,7 +19,7 @@ if [ "$FOUND" -ne "0" ]; then
 	echo ""
 	sleep 1
 
-	docker exec test-db mongo admin --eval "db.createUser({user: '${ADMIN_USER}', pwd: '${ADMIN_PASS}', roles:[{role:'root',db:'admin'}]});"
+	docker exec sample-db mongo admin --eval "db.createUser({user: '${ADMIN_USER}', pwd: '${ADMIN_PASS}', roles:[{role:'root',db:'admin'}]});"
 
 	echo ""
 	echo 'DATABASE:  *** Creating App User ***'
@@ -27,13 +27,13 @@ if [ "$FOUND" -ne "0" ]; then
 		
 	sleep 2
 
-	docker exec test-db mongo sample -u $ADMIN_USER -p $ADMIN_PASS --authenticationDatabase admin --eval "db.createUser({user: '${APP_USER}', pwd: '${APP_PASS}', roles:[{role:'dbOwner', db:'sample'}]});"
+	docker exec sample-db mongo sample -u $ADMIN_USER -p $ADMIN_PASS --authenticationDatabase admin --eval "db.createUser({user: '${APP_USER}', pwd: '${APP_PASS}', roles:[{role:'dbOwner', db:'sample'}]});"
 
-	docker exec test-db touch /data/db/.mongodb_password_set
+	docker exec sample-db touch /data/db/.mongodb_password_set
 
 	sleep 1
 	
-	docker restart bench-service
+	docker restart sample-service
 fi
 
 if [ "$FOUND" -ne "0" -o "$BUILD_TYPE" = "Reset" ]; then
@@ -41,7 +41,7 @@ if [ "$FOUND" -ne "0" -o "$BUILD_TYPE" = "Reset" ]; then
 	echo 'DATABASE:  *** Loading or Restoring Initial Data ***'
 	echo ""
 	
-	docker exec test-db mongo sample -u $APP_USER -p $APP_PASS --authenticationDatabase courthack /data/setup.js
+	docker exec sample-db mongo sample -u $APP_USER -p $APP_PASS --authenticationDatabase sample /data/setup.js
 fi
 
 echo ""

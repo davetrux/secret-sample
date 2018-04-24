@@ -14,12 +14,12 @@ services:
             - mongo:mongo
     mongo:
         build: 
-            context: db/.
+            context: sample-db/.
         image: "sample_db:1.0.${BUILD_NUMBER}"
         container_name: 'sample-db'
         restart: always
         ports:
-            - "25017:27017"
+            - "27017:27017"
         volumes:
             - /data/sample:/data/db:rw
         command: mongod --auth

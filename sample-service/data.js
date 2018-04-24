@@ -2,16 +2,22 @@
 
 const express = require('express');
 const router = express.Router();
-const Requests = require('./data');
+const Requests = require('./model');
+const Credstash = require('nodecredstash');
+const credstash = new Credstash({awsOpts: {region: 'us-east-1'}});
+const mongoose = require('mongoose');
 
 module.exports = router;
 
 credstash.getSecret({name: 'sample-db-user'})
 	.then(password => {
 		const conn = 'mongodb://service:' + password + '@' + 'mongo:27017/sample';
+		console.log(conn);
 		mongoose.connect(conn);
+		console.log('DB Connected')
 	}).catch(err => {
-	throw err
+		console.log(err);
+		throw err
 	});
 
 router.get('/', function(req, res) {
