@@ -1,0 +1,26 @@
+node_modules/
+
+# WebStorm config
+.idea/
+
+web/output/*
+npm-debug.log
+
+#Mac OS
+.DS_Store
+
+
+log/
+*.log
+
+*test-reports.xml
+
+build/
+
+.sonar_lock
+
+*jshint.xml
+
+coverage/
+
+.nyc_output/
