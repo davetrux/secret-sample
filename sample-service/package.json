@@ -1,0 +1,14 @@
+{
+  "name": "sample-service",
+  "version": "1.0.0",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "express": "^4.16.3",
+    "mongoose": "^5.0.16",
+    "nodecredstash": "^2.0.2"
+  },
+  "devDependencies": {}
+}
